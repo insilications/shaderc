@@ -1,10 +1,10 @@
 # This file contains additional pkgconfig build requirements that did
 # not get picked up automatically. One name per line, no whitespace.
-vulkan
-lcms2
+# SPIRV-Tools-shared
+# SPIRV-Tools
 gmock
 gmock_main
 gtest
 gtest_main
-SPIRV-Tools-shared
-SPIRV-Tools
+lcms2
+vulkan

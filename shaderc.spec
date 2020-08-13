@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : shaderc
 Version  : 2020.2
-Release  : 1
+Release  : 2
 URL      : file:///insilications/build/clearlinux/packages/shaderc/shaderc-v2020.2.zip
 Source0  : file:///insilications/build/clearlinux/packages/shaderc/shaderc-v2020.2.zip
 Source1  : file:///insilications/build/clearlinux/packages/shaderc/SPIRV-Headers-1.5.3.zip
@@ -19,22 +19,16 @@ Group    : Development/Tools
 License  : Apache-2.0 LGPL-2.1+
 Requires: shaderc-bin = %{version}-%{release}
 Requires: shaderc-lib = %{version}-%{release}
-BuildRequires : SPIRV-Headers-dev
-BuildRequires : SPIRV-Tools-dev
 BuildRequires : Vulkan-Headers-dev
 BuildRequires : Vulkan-Loader-dev
 BuildRequires : asciidoctor
 BuildRequires : buildreq-cmake
 BuildRequires : findutils
 BuildRequires : glibc-dev
-BuildRequires : glslang-dev
-BuildRequires : glslang-staticdev
 BuildRequires : googletest
 BuildRequires : googletest-dev
 BuildRequires : lcms2-dev
 BuildRequires : lcms2-staticdev
-BuildRequires : pkgconfig(SPIRV-Tools)
-BuildRequires : pkgconfig(SPIRV-Tools-shared)
 BuildRequires : pkgconfig(gmock)
 BuildRequires : pkgconfig(gmock_main)
 BuildRequires : pkgconfig(gtest)
@@ -93,30 +87,30 @@ staticdev components for the shaderc package.
 %prep
 %setup -q -n shaderc-v2020.2
 cd %{_builddir}
-unzip -q %{_sourcedir}/SPIRV-Headers-1.5.3.zip
-cd %{_builddir}
 unzip -q %{_sourcedir}/SPIRV-Tools-v2020.4.zip
-cd %{_builddir}
-unzip -q %{_sourcedir}/effcee-v2019.1.zip
 cd %{_builddir}
 unzip -q %{_sourcedir}/googletest-release-1.10.0.zip
 cd %{_builddir}
+unzip -q %{_sourcedir}/re2-2020-08-01.zip
+cd %{_builddir}
+unzip -q %{_sourcedir}/SPIRV-Headers-1.5.3.zip
+cd %{_builddir}
 unzip -q %{_sourcedir}/glslang-master-tot.zip
 cd %{_builddir}
-unzip -q %{_sourcedir}/re2-2020-08-01.zip
+unzip -q %{_sourcedir}/effcee-v2019.1.zip
 cd %{_builddir}/shaderc-v2020.2
-mkdir -p third_party/spirv-headers
-cp -r %{_builddir}/SPIRV-Headers-1.5.3/* %{_builddir}/shaderc-v2020.2/third_party/spirv-headers
 mkdir -p third_party/spirv-tools
 cp -r %{_builddir}/SPIRV-Tools-v2020.4/* %{_builddir}/shaderc-v2020.2/third_party/spirv-tools
-mkdir -p third_party/effcee
-cp -r %{_builddir}/effcee-v2019.1/* %{_builddir}/shaderc-v2020.2/third_party/effcee
 mkdir -p third_party/googletest
 cp -r %{_builddir}/googletest-release-1.10.0/* %{_builddir}/shaderc-v2020.2/third_party/googletest
-mkdir -p third_party/glslang
-cp -r %{_builddir}/glslang-master-tot/* %{_builddir}/shaderc-v2020.2/third_party/glslang
 mkdir -p third_party/re2
 cp -r %{_builddir}/re2-2020-08-01/* %{_builddir}/shaderc-v2020.2/third_party/re2
+mkdir -p third_party/spirv-headers
+cp -r %{_builddir}/SPIRV-Headers-1.5.3/* %{_builddir}/shaderc-v2020.2/third_party/spirv-headers
+mkdir -p third_party/glslang
+cp -r %{_builddir}/glslang-master-tot/* %{_builddir}/shaderc-v2020.2/third_party/glslang
+mkdir -p third_party/effcee
+cp -r %{_builddir}/effcee-v2019.1/* %{_builddir}/shaderc-v2020.2/third_party/effcee
 %patch1 -p1
 
 %build
@@ -124,7 +118,7 @@ unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1597316946
+export SOURCE_DATE_EPOCH=1597327212
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -181,7 +175,7 @@ unset no_proxy
 cd clr-build; make test
 
 %install
-export SOURCE_DATE_EPOCH=1597316946
+export SOURCE_DATE_EPOCH=1597327212
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
