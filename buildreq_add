@@ -1,12 +1,18 @@
 # This file contains additional build requirements that did not get
 # picked up automatically. One name per line, no whitespace.
-SPIRV-Tools-dev
-SPIRV-Headers-dev
+asciidoctor
+buildreq-cmake
+findutils
+glibc-dev
 glslang-dev
 glslang-staticdev
 lcms2-dev
 lcms2-staticdev
-Vulkan-Loader-dev
-Vulkan-Loader-staticdev
+python3
+python3-dev
+SPIRV-Headers-dev
+SPIRV-Tools-dev
 Vulkan-Headers-dev
-findutils
+Vulkan-Loader-dev
+googletest
+googletest-dev

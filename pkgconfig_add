@@ -2,3 +2,9 @@
 # not get picked up automatically. One name per line, no whitespace.
 vulkan
 lcms2
+gmock
+gmock_main
+gtest
+gtest_main
+SPIRV-Tools-shared
+SPIRV-Tools

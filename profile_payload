@@ -1,1 +1,1 @@
-meson test -C builddir 
+ctest -j16 -V || :
