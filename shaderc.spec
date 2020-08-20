@@ -5,10 +5,10 @@
 %define keepstatic 1
 Name     : shaderc
 Version  : 2020.2
-Release  : 2
+Release  : 3
 URL      : file:///insilications/build/clearlinux/packages/shaderc/shaderc-v2020.2.zip
 Source0  : file:///insilications/build/clearlinux/packages/shaderc/shaderc-v2020.2.zip
-Source1  : file:///insilications/build/clearlinux/packages/shaderc/SPIRV-Headers-1.5.3.zip
+Source1  : file:///insilications/build/clearlinux/packages/shaderc/SPIRV-Headers-1.5.3.reservations1.zip
 Source2  : file:///insilications/build/clearlinux/packages/shaderc/SPIRV-Tools-v2020.4.zip
 Source3  : file:///insilications/build/clearlinux/packages/shaderc/effcee-v2019.1.zip
 Source4  : file:///insilications/build/clearlinux/packages/shaderc/glslang-master-tot.zip
@@ -87,28 +87,28 @@ staticdev components for the shaderc package.
 %prep
 %setup -q -n shaderc-v2020.2
 cd %{_builddir}
-unzip -q %{_sourcedir}/SPIRV-Tools-v2020.4.zip
-cd %{_builddir}
 unzip -q %{_sourcedir}/googletest-release-1.10.0.zip
 cd %{_builddir}
-unzip -q %{_sourcedir}/re2-2020-08-01.zip
+unzip -q %{_sourcedir}/SPIRV-Headers-1.5.3.reservations1.zip
 cd %{_builddir}
-unzip -q %{_sourcedir}/SPIRV-Headers-1.5.3.zip
+unzip -q %{_sourcedir}/SPIRV-Tools-v2020.4.zip
 cd %{_builddir}
 unzip -q %{_sourcedir}/glslang-master-tot.zip
 cd %{_builddir}
+unzip -q %{_sourcedir}/re2-2020-08-01.zip
+cd %{_builddir}
 unzip -q %{_sourcedir}/effcee-v2019.1.zip
 cd %{_builddir}/shaderc-v2020.2
-mkdir -p third_party/spirv-tools
-cp -r %{_builddir}/SPIRV-Tools-v2020.4/* %{_builddir}/shaderc-v2020.2/third_party/spirv-tools
 mkdir -p third_party/googletest
 cp -r %{_builddir}/googletest-release-1.10.0/* %{_builddir}/shaderc-v2020.2/third_party/googletest
-mkdir -p third_party/re2
-cp -r %{_builddir}/re2-2020-08-01/* %{_builddir}/shaderc-v2020.2/third_party/re2
 mkdir -p third_party/spirv-headers
-cp -r %{_builddir}/SPIRV-Headers-1.5.3/* %{_builddir}/shaderc-v2020.2/third_party/spirv-headers
+cp -r %{_builddir}/SPIRV-Headers-1.5.3.reservations1/* %{_builddir}/shaderc-v2020.2/third_party/spirv-headers
+mkdir -p third_party/spirv-tools
+cp -r %{_builddir}/SPIRV-Tools-v2020.4/* %{_builddir}/shaderc-v2020.2/third_party/spirv-tools
 mkdir -p third_party/glslang
 cp -r %{_builddir}/glslang-master-tot/* %{_builddir}/shaderc-v2020.2/third_party/glslang
+mkdir -p third_party/re2
+cp -r %{_builddir}/re2-2020-08-01/* %{_builddir}/shaderc-v2020.2/third_party/re2
 mkdir -p third_party/effcee
 cp -r %{_builddir}/effcee-v2019.1/* %{_builddir}/shaderc-v2020.2/third_party/effcee
 %patch1 -p1
@@ -118,7 +118,7 @@ unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1597327212
+export SOURCE_DATE_EPOCH=1597945197
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -132,7 +132,7 @@ export CFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fl
 export FCFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
 export FFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
 export CXXFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -fvisibility-inlines-hidden -pipe -fPIC -ffat-lto-objects $PGO_GEN"
-export LDFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
+export LDFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects -Wl,-Bdynamic -L/usr/lib64 -pthread -lpthread -lrt -lc -ldl -lgcc -lgcc_s -lstdc++ -lmvec -lm $PGO_GEN"
 ## pgo use
 ## -ffat-lto-objectsts -fno-PIE -fno-PIE -m64 -no-pie -fpic -fvisibility=hidden -flto-partition=none
 ## gcc: -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -fno-common
@@ -141,19 +141,20 @@ export CFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall 
 export FCFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
 export FFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
 export CXXFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -fPIC -ffat-lto-objects $PGO_USE"
-export LDFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
+export LDFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects -Wl,-Bdynamic -L/usr/lib64 -pthread -lpthread -lrt -lc -ldl -lgcc -lgcc_s -lstdc++ -lmvec -lm $PGO_USE"
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 #export CCACHE_DISABLE=1
-# make autospec URL=https://github.com/google/shaderc.git FROM_GIT=1 FROM_BRANCH=main ARCHIVES_GIT="https://github.com/google/googletest.git third_party/googletest master https://github.com/KhronosGroup/SPIRV-Headers.git third_party/spirv-headers master https://github.com/KhronosGroup/SPIRV-Tools.git third_party/spirv-tools master https://github.com/KhronosGroup/glslang.git third_party/glslang master https://github.com/google/re2.git third_party/re2 master https://github.com/google/effcee.git third_party/effcee main" MOCK_OPTS="--disable-plugin=tmpfs --enable-plugin=ccache"
+# -Dcpp_args=-I/usr/include/glslang
+# archives_from_git = https://github.com/google/googletest.git third_party/googletest master https://github.com/KhronosGroup/SPIRV-Headers.git third_party/spirv-headers master https://github.com/KhronosGroup/SPIRV-Tools.git third_party/spirv-tools master https://github.com/KhronosGroup/glslang.git third_party/glslang master https://github.com/google/re2.git third_party/re2 master https://github.com/google/effcee.git third_party/effcee main
 ## altflags_pgo end
 export CFLAGS="${CFLAGS_GENERATE}"
 export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
-%cmake .. -DLIB_INSTALL_DIR=lib64 -DCMAKE_INSTALL_LIBDIR=lib64 -DBUILD_STATIC_LIBS:BOOL=ON -DBUILD_STATIC_LIBS=1 -DENABLE_SHARED:bool=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:bool=ON -DCMAKE_BUILD_TYPE=Release -DSHADERC_ENABLE_TESTS=0 -DSHADERC_SKIP_TESTS=1
+%cmake .. -DLIB_INSTALL_DIR=lib64 -DCMAKE_INSTALL_LIBDIR=lib64 -DBUILD_STATIC_LIBS:BOOL=ON -DBUILD_STATIC_LIBS=1 -DENABLE_SHARED:bool=OFF -DBUILD_SHARED_LIBS=0 -DCMAKE_BUILD_TYPE=Release -DSHADERC_ENABLE_TESTS=0 -DSHADERC_SKIP_TESTS=1
 make  %{?_smp_mflags}  VERBOSE=1 V=1
 
 ctest -j16 -V || :
@@ -163,7 +164,7 @@ export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%cmake .. -DLIB_INSTALL_DIR=lib64 -DCMAKE_INSTALL_LIBDIR=lib64 -DBUILD_STATIC_LIBS:BOOL=ON -DBUILD_STATIC_LIBS=1 -DENABLE_SHARED:bool=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS:bool=ON -DCMAKE_BUILD_TYPE=Release -DSHADERC_ENABLE_TESTS=0 -DSHADERC_SKIP_TESTS=1
+%cmake .. -DLIB_INSTALL_DIR=lib64 -DCMAKE_INSTALL_LIBDIR=lib64 -DBUILD_STATIC_LIBS:BOOL=ON -DBUILD_STATIC_LIBS=1 -DENABLE_SHARED:bool=OFF -DBUILD_SHARED_LIBS=0 -DCMAKE_BUILD_TYPE=Release -DSHADERC_ENABLE_TESTS=0 -DSHADERC_SKIP_TESTS=1
 make  %{?_smp_mflags}  VERBOSE=1 V=1
 popd
 
@@ -175,7 +176,7 @@ unset no_proxy
 cd clr-build; make test
 
 %install
-export SOURCE_DATE_EPOCH=1597327212
+export SOURCE_DATE_EPOCH=1597945197
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
@@ -359,20 +360,13 @@ popd
 /usr/lib64/cmake/SPIRVTargets.cmake
 /usr/lib64/cmake/SPVRemapperTargets-release.cmake
 /usr/lib64/cmake/SPVRemapperTargets.cmake
-/usr/lib64/cmake/glslang-default-resource-limitsTargets-release.cmake
-/usr/lib64/cmake/glslang-default-resource-limitsTargets.cmake
 /usr/lib64/cmake/glslangTargets-release.cmake
 /usr/lib64/cmake/glslangTargets.cmake
 /usr/lib64/cmake/glslangValidatorTargets-release.cmake
 /usr/lib64/cmake/glslangValidatorTargets.cmake
 /usr/lib64/cmake/spirv-remapTargets-release.cmake
 /usr/lib64/cmake/spirv-remapTargets.cmake
-/usr/lib64/libHLSL.so
 /usr/lib64/libSPIRV-Tools-shared.so
-/usr/lib64/libSPIRV.so
-/usr/lib64/libSPVRemapper.so
-/usr/lib64/libglslang-default-resource-limits.so
-/usr/lib64/libglslang.so
 /usr/lib64/libshaderc_shared.so
 /usr/lib64/pkgconfig/SPIRV-Tools-shared.pc
 /usr/lib64/pkgconfig/SPIRV-Tools.pc
@@ -382,17 +376,21 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libglslang.so.11
-/usr/lib64/libglslang.so.11.0.0
 /usr/lib64/libshaderc_shared.so.1
 
 %files staticdev
 %defattr(-,root,root,-)
+/usr/lib64/libGenericCodeGen.a
+/usr/lib64/libHLSL.a
+/usr/lib64/libMachineIndependent.a
 /usr/lib64/libOGLCompiler.a
 /usr/lib64/libOSDependent.a
 /usr/lib64/libSPIRV-Tools-link.a
 /usr/lib64/libSPIRV-Tools-opt.a
 /usr/lib64/libSPIRV-Tools-reduce.a
 /usr/lib64/libSPIRV-Tools.a
+/usr/lib64/libSPIRV.a
+/usr/lib64/libSPVRemapper.a
+/usr/lib64/libglslang.a
 /usr/lib64/libshaderc.a
 /usr/lib64/libshaderc_combined.a
