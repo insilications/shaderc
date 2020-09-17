@@ -4,16 +4,16 @@
 #
 %define keepstatic 1
 Name     : shaderc
-Version  : 2020.2
-Release  : 4
-URL      : file:///insilications/build/clearlinux/packages/shaderc/shaderc-v2020.2.tar.gz
-Source0  : file:///insilications/build/clearlinux/packages/shaderc/shaderc-v2020.2.tar.gz
-Source1  : file:///insilications/build/clearlinux/packages/shaderc/SPIRV-Headers-1.5.3.reservations1.tar.gz
+Version  : 2020.3
+Release  : 5
+URL      : file:///insilications/build/clearlinux/packages/shaderc/shaderc-v2020.3.tar.gz
+Source0  : file:///insilications/build/clearlinux/packages/shaderc/shaderc-v2020.3.tar.gz
+Source1  : file:///insilications/build/clearlinux/packages/shaderc/SPIRV-Headers-v.tar.gz
 Source2  : file:///insilications/build/clearlinux/packages/shaderc/SPIRV-Tools-v2020.4.tar.gz
 Source3  : file:///insilications/build/clearlinux/packages/shaderc/effcee-v2019.1.tar.gz
-Source4  : file:///insilications/build/clearlinux/packages/shaderc/glslang-master-tot.tar.gz
-Source5  : file:///insilications/build/clearlinux/packages/shaderc/googletest-release-1.10.0.tar.gz
-Source6  : file:///insilications/build/clearlinux/packages/shaderc/re2-2020-08-01.tar.gz
+Source4  : file:///insilications/build/clearlinux/packages/shaderc/glslang-v.tar.gz
+Source5  : file:///insilications/build/clearlinux/packages/shaderc/googletest-v1.10.tar.gz
+Source6  : file:///insilications/build/clearlinux/packages/shaderc/re2-06.tar.gz
 Summary  : Tools and libraries for Vulkan shader compilation
 Group    : Development/Tools
 License  : Apache-2.0 LGPL-2.1+
@@ -87,15 +87,15 @@ staticdev components for the shaderc package.
 %prep
 %setup -q -n shaderc
 cd %{_builddir}
-tar xf %{_sourcedir}/googletest-release-1.10.0.tar.gz
+tar xf %{_sourcedir}/googletest-v1.10.tar.gz
 cd %{_builddir}
-tar xf %{_sourcedir}/SPIRV-Headers-1.5.3.reservations1.tar.gz
+tar xf %{_sourcedir}/SPIRV-Headers-v.tar.gz
 cd %{_builddir}
 tar xf %{_sourcedir}/SPIRV-Tools-v2020.4.tar.gz
 cd %{_builddir}
-tar xf %{_sourcedir}/glslang-master-tot.tar.gz
+tar xf %{_sourcedir}/glslang-v.tar.gz
 cd %{_builddir}
-tar xf %{_sourcedir}/re2-2020-08-01.tar.gz
+tar xf %{_sourcedir}/re2-06.tar.gz
 cd %{_builddir}
 tar xf %{_sourcedir}/effcee-v2019.1.tar.gz
 cd %{_builddir}/shaderc
@@ -117,8 +117,9 @@ cp -r %{_builddir}/effcee/* %{_builddir}/shaderc/third_party/effcee
 unset http_proxy
 unset https_proxy
 unset no_proxy
+export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1598710491
+export SOURCE_DATE_EPOCH=1600340045
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -149,6 +150,9 @@ export NM=gcc-nm
 # -Dcpp_args=-I/usr/include/glslang
 # archives_from_git = https://github.com/google/googletest.git third_party/googletest master https://github.com/KhronosGroup/SPIRV-Headers.git third_party/spirv-headers master https://github.com/KhronosGroup/SPIRV-Tools.git third_party/spirv-tools master https://github.com/KhronosGroup/glslang.git third_party/glslang master https://github.com/google/re2.git third_party/re2 master https://github.com/google/effcee.git third_party/effcee main
 ## altflags_pgo end
+##
+%define _lto_cflags 1
+##
 export CFLAGS="${CFLAGS_GENERATE}"
 export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
@@ -158,7 +162,7 @@ export LDFLAGS="${LDFLAGS_GENERATE}"
 make  %{?_smp_mflags}  VERBOSE=1 V=1
 
 ctest -j16 -V || :
-find . -type f -not -name '*.gcno' -delete -print
+find . -type f,l -not -name '*.gcno' -delete -print
 export CFLAGS="${CFLAGS_USE}"
 export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
@@ -173,10 +177,11 @@ export LANG=C.UTF-8
 unset http_proxy
 unset https_proxy
 unset no_proxy
+export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 cd clr-build; make test
 
 %install
-export SOURCE_DATE_EPOCH=1598710491
+export SOURCE_DATE_EPOCH=1600340045
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
